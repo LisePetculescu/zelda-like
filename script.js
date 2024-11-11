@@ -116,33 +116,33 @@ function movingDirection(event) {
   }
 }
 
-function movePlayer(deltaTime) {
-  const movement = deltaTime / playerPosition.speed;
+// function movePlayer(deltaTime) {
+//   const movement = deltaTime / playerPosition.speed;
 
-  switch (direction) {
-    case 0:
-      playerPosition.y = playerPosition.y - movement;
-      break;
-    case 1:
-      playerPosition.y = playerPosition.y + movement;
-      break;
-    case 2:
-      playerPosition.x = playerPosition.x - movement;
-      break;
-    case 3:
-      playerPosition.x = playerPosition.x + movement;
-      break;
-  }
+//   switch (direction) {
+//     case 0:
+//       playerPosition.y = playerPosition.y - movement;
+//       break;
+//     case 1:
+//       playerPosition.y = playerPosition.y + movement;
+//       break;
+//     case 2:
+//       playerPosition.x = playerPosition.x - movement;
+//       break;
+//     case 3:
+//       playerPosition.x = playerPosition.x + movement;
+//       break;
+//   }
 
-  //   playerPosition.x = playerPosition.x + 10;
+//   //   playerPosition.x = playerPosition.x + 10;
 
-  displayPlayer();
-  //   playerPosition.speed = playerPosition.speed + 10;
-}
+//   displayPlayer();
+//   //   playerPosition.speed = playerPosition.speed + 10;
+// }
 
 function canMove(player, position) {
-  if (playerPosition.x > 0 && playerPosition.x < gameField.width && playerPosition.y > 0 && playerPosition.y < gameField.height) return true;
-  else return false;
+  if (playerPosition.x > 0 || playerPosition.x < gameField.width || playerPosition.y > 0 || playerPosition.y < gameField.height) return false;
+  else return true;
 }
 
 function updateKeyState(key, isPressed) {
@@ -166,9 +166,9 @@ function updateKeyState(key, isPressed) {
   }
 }
 
+// lav check om midlertidig position er lovlig
 function updateDirection(deltaTime) {
   if (canMove) {
-    console.log("true");
     if (controls.up) {
       playerPosition.y -= playerPosition.speed * deltaTime;
     }

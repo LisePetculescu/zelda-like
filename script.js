@@ -1,5 +1,9 @@
 window.addEventListener("load", start);
 
+/* TODO: when player moves shit between pixels of player 
+when moving left switch between walking left oics
+*/
+
 let playerPosition = {
   x: 100,
   y: 100,

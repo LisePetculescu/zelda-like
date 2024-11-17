@@ -20,23 +20,135 @@ h1 {
 }
 
 #player {
+  width: 32px;
+  aspect-ratio: 16/20;
+  background-image: url("./images/Character\ 5.png");
+  background-size: 400% 400%;
+  image-rendering: pixelated;
+  position: absolute;
+}
+
+#player.animate {
+  animation-duration: 0.8s;
+  animation-timing-function: steps(4);
+  animation-iteration-count: infinite;
+}
+
+#player.down {
+  background-position: 0% 0%;
+  animation-name: down;
+}
+
+#player.up {
+  background-position: 0% -100%;
+  animation-name: up;
+}
+#player.left {
+  background-position: 0% -200%;
+  animation-name: left;
+}
+#player.right {
+  background-position: 0% -300%;
+  animation-name: right;
+}
+
+#player.hit {
+  animation-duration: 0.2s;
+  /* animation-timing-function: steps(3); */
+  animation-iteration-count: 5;
+  background-position: 0% 0%;
+  animation-name: collision-animation;
+}
+
+#enemy {
+  width: 32px;
+  aspect-ratio: 16/20;
+  background-image: url("./images/Character\ 7.png");
+  background-size: 400% 400%;
+  image-rendering: pixelated;
+  position: absolute;
+  /* background-position: -100% 0%; */
+}
+
+#enemy.animate {
+  animation-duration: 0.5s;
+  animation-timing-function: steps(4);
+  animation-iteration-count: infinite;
+}
+#enemy.left {
+  background-position: 0% -200%;
+  animation-name: left;
+}
+#enemy.right {
+  background-position: 0% -300%;
+  animation-name: right;
+}
+
+@keyframes collision-animation {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes down {
+  from {
+    background-position: 0% 0%;
+  }
+  to {
+    background-position: -400% 0%;
+  }
+}
+
+@keyframes up {
+  from {
+    background-position: 0% -100%;
+  }
+  to {
+    background-position: -400% -100%;
+  }
+}
+@keyframes left {
+  from {
+    background-position: 0% -200%;
+  }
+  to {
+    background-position: -400% -200%;
+  }
+}
+@keyframes right {
+  from {
+    background-position: 0% -300%;
+  }
+  to {
+    background-position: -400% -300%;
+  }
+}
+
+/* #player {
   background-image: url("./images/Character\ 5.png");
   width: 32px;
   height: 40px;
   background-size: 400%;
   position: absolute;
   /* translate: 175px 185px; */
-}
+/* } */
 
-#enemy {
+/* #enemy {
   background-image: url("./images/Character\ 7.png");
   width: 32px;
   height: 40px;
   background-size: 400%;
   position: absolute;
-}
+} */
 
 .collision {
   color: red;
-  transform: scale(3);
+  text-align: center;
+  font-size: xx-large;
 }

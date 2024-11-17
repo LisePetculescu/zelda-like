@@ -1,33 +1,5 @@
 window.addEventListener("load", start);
 
-let player = {
-  x: 100,
-  y: 100,
-  speed: 70, // px/s
-  width: 30,
-  height: 40,
-};
-
-let enemy = {
-  x: 185,
-  y: 180,
-  speed: 200, // px/s
-  width: 30,
-  height: 40,
-};
-
-const gameField = {
-  width: 400,
-  height: 400,
-};
-
-let controls = {
-  up: false,
-  down: false,
-  left: false,
-  right: false,
-};
-
 function start() {
   console.log("start.. ");
 
@@ -42,7 +14,40 @@ function start() {
   });
 }
 
+// ************* MODEL **************
+let player = {
+  x: 100,
+  y: 100,
+  speed: 70, // px/s
+  width: 30,
+  height: 40,
+  moving: false,
+  animationDirection: "",
+};
+
+let enemy = {
+  x: 185,
+  y: 180,
+  speed: 200, // px/s
+  width: 30,
+  height: 40,
+  moving: true,
+  animationDirection: "",
+};
+
+const gameField = {
+  width: 400,
+  height: 400,
+};
+
 // *************** controls *******************
+
+let controls = {
+  up: false,
+  down: false,
+  left: false,
+  right: false,
+};
 
 function updateKeyState(key, isPressed) {
   switch (key) {
@@ -80,6 +85,7 @@ function displayEnemy() {
 
 // ******** tick / view *********
 
+let hitAnimationActive = false;
 let lastTime = 0;
 function tick(time) {
   requestAnimationFrame(tick);
@@ -90,7 +96,7 @@ function tick(time) {
   movePlayer(deltaTime);
   moveEnemy(deltaTime);
 
-  // check collisions
+  // Check collisions
   if (isColliding(player, enemy)) {
     player.collision = true;
     enemy.collision = true;
@@ -100,11 +106,51 @@ function tick(time) {
     enemy.collision = false;
   }
 
-  // update display
+  // Update display
   displayPlayer();
   displayEnemy();
+  displayPlayerAnimation();
+  displayEnemyAnimation();
   displayCollisionInfo();
 }
+// function tick(time) {
+//   requestAnimationFrame(tick);
+
+//   const deltaTime = (time - lastTime) / 1000;
+//   lastTime = time;
+
+//   movePlayer(deltaTime);
+//   moveEnemy(deltaTime);
+
+//   const visualPlayer = document.querySelector("#player");
+//   // check collisions
+//   if (isColliding(player, enemy)) {
+//     player.collision = true;
+//     enemy.collision = true;
+//     console.log("true");
+
+//     if (!hitAnimationActive) {
+//       visualPlayer.classList.add("hit");
+//       hitAnimationActive = true;
+
+//       // Remove the hit class after 5 seconds
+//       setTimeout(() => {
+//         visualPlayer.classList.remove("hit");
+//         hitAnimationActive = false;
+//       }, 2000);
+//     }
+//   } else {
+//     player.collision = false;
+//     enemy.collision = false;
+//   }
+
+//   // update display
+//   displayPlayer();
+//   displayEnemy();
+//   displayPlayerAnimation();
+//   displayEnemyAnimation();
+//   displayCollisionInfo();
+// }
 
 /*
 Note fra petl:
@@ -115,16 +161,30 @@ bare gange begge delta (deltaX og deltaY) med 0.707, altså kvadratroden af 0.5
 // lav check om midlertidig position er lovlig
 let playerDirection = { x: 0, y: 0 };
 function movePlayer(deltaTime) {
+  if (hitAnimationActive) return; 
+  
+  // Reset player direction
+  playerDirection.x = 0;
+  playerDirection.y = 0;
+  player.moving = false;
 
   if (controls.up) {
     playerDirection.y = -1;
+    player.moving = true;
+    player.animationDirection = "up";
   } else if (controls.down) {
     playerDirection.y = +1;
+    player.moving = true;
+    player.animationDirection = "down";
   }
   if (controls.left) {
     playerDirection.x = -1;
+    player.moving = true;
+    player.animationDirection = "left";
   } else if (controls.right) {
     playerDirection.x = +1;
+    player.moving = true;
+    player.animationDirection = "right";
   }
 
   if (playerDirection.x == 0 && playerDirection.y == 0) return;
@@ -197,8 +257,12 @@ function moveEnemy(deltaTime) {
   // Change direction if the enemy reaches the edges of the game field
   if (position.x <= 0) {
     enemyDirection = 1; // Move right
+    // enemy.moving = true;
+    enemy.animationDirection = "right";
   } else if (position.x >= gameField.width - enemy.width) {
     enemyDirection = -1; // Move left
+    // enemy.moving = true;
+    enemy.animationDirection = "left";
   }
 
   enemy.x = position.x;
@@ -208,6 +272,52 @@ function canMove(player, position) {
   if (position.x < -2 || position.y < -2 || position.x > gameField.width - player.width || position.y > gameField.height - player.height) return false;
 
   return true;
+}
+
+function displayPlayerAnimation() {
+  const visualPlayer = document.querySelector("#player");
+
+  if (!player.moving) {
+    visualPlayer.classList.remove("animate");
+  } else if (!visualPlayer.classList.contains("animate")) {
+    visualPlayer.classList.add("animate");
+  }
+
+  if (player.animationDirection && !visualPlayer.classList.contains(player.animationDirection)) {
+    visualPlayer.classList.remove("up", "down", "left", "right");
+    visualPlayer.classList.add(player.animationDirection);
+  }
+
+  // add walking animation class after the hit animation is done
+  if (player.collision) {
+    if (!visualPlayer.classList.contains("hit")) {
+      visualPlayer.classList.add("hit");
+      hitAnimationActive = true;
+
+      // Remove the hit class after a few seconds
+      setTimeout(() => {
+        visualPlayer.classList.remove("hit");
+        hitAnimationActive = false;
+        // Reapply the animation direction class
+        visualPlayer.classList.add(player.animationDirection);
+      }, 1000);
+    }
+  }
+}
+
+function displayEnemyAnimation() {
+  const visualEnemy = document.querySelector("#enemy");
+
+  if (!enemy.moving) {
+    visualEnemy.classList.remove("animate");
+  } else if (!visualEnemy.classList.contains("animate")) {
+    visualEnemy.classList.add("animate");
+  }
+
+  if (enemy.animationDirection && !visualEnemy.classList.contains(enemy.animationDirection)) {
+    visualEnemy.classList.remove("left", "right");
+    visualEnemy.classList.add(enemy.animationDirection);
+  }
 }
 
 function isColliding(player, enemy) {
@@ -229,11 +339,32 @@ function isColliding(player, enemy) {
 
 function displayCollisionInfo() {
   const collisionInfo = document.querySelector("#collision-status");
+  const visualPlayer = document.querySelector("#player");
+
   if (player.collision) {
-    collisionInfo.textContent = "You're DEAD!!";
+    collisionInfo.textContent = "You're HIT!!";
     collisionInfo.classList.add("collision");
+
+    if (!visualPlayer.classList.contains("hit")) {
+      visualPlayer.classList.add("hit");
+
+      // Remove the hit class after 5 seconds
+      setTimeout(() => {
+        visualPlayer.classList.remove("hit");
+      }, 2000);
+    }
   } else {
-    collisionInfo.textContent = "Game on! ...";
+    collisionInfo.textContent = "";
     collisionInfo.classList.remove("collision");
   }
 }
+// function displayCollisionInfo() {
+//   const collisionInfo = document.querySelector("#collision-status");
+//   if (player.collision) {
+//     collisionInfo.textContent = "You're HIT!!";
+//     collisionInfo.classList.add("collision");
+//   } else {
+//     collisionInfo.textContent = "";
+//     collisionInfo.classList.remove("collision");
+//   }
+// }

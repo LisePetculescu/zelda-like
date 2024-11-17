@@ -35,3 +35,8 @@ h1 {
   background-size: 400%;
   position: absolute;
 }
+
+.collision {
+  color: red;
+  transform: scale(3);
+}

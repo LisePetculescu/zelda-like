@@ -22,7 +22,7 @@ let player = {
   width: 30,
   height: 40,
   moving: false,
-  animationDirection: "",
+  animationDirection: ""
 };
 
 let enemy = {
@@ -32,12 +32,12 @@ let enemy = {
   width: 30,
   height: 40,
   moving: true,
-  animationDirection: "",
+  animationDirection: ""
 };
 
 const gameField = {
   width: 400,
-  height: 400,
+  height: 400
 };
 
 // *************** controls *******************
@@ -46,7 +46,7 @@ let controls = {
   up: false,
   down: false,
   left: false,
-  right: false,
+  right: false
 };
 
 function updateKeyState(key, isPressed) {
@@ -113,44 +113,6 @@ function tick(time) {
   displayEnemyAnimation();
   displayCollisionInfo();
 }
-// function tick(time) {
-//   requestAnimationFrame(tick);
-
-//   const deltaTime = (time - lastTime) / 1000;
-//   lastTime = time;
-
-//   movePlayer(deltaTime);
-//   moveEnemy(deltaTime);
-
-//   const visualPlayer = document.querySelector("#player");
-//   // check collisions
-//   if (isColliding(player, enemy)) {
-//     player.collision = true;
-//     enemy.collision = true;
-//     console.log("true");
-
-//     if (!hitAnimationActive) {
-//       visualPlayer.classList.add("hit");
-//       hitAnimationActive = true;
-
-//       // Remove the hit class after 5 seconds
-//       setTimeout(() => {
-//         visualPlayer.classList.remove("hit");
-//         hitAnimationActive = false;
-//       }, 2000);
-//     }
-//   } else {
-//     player.collision = false;
-//     enemy.collision = false;
-//   }
-
-//   // update display
-//   displayPlayer();
-//   displayEnemy();
-//   displayPlayerAnimation();
-//   displayEnemyAnimation();
-//   displayCollisionInfo();
-// }
 
 /*
 Note fra petl:
@@ -161,8 +123,8 @@ bare gange begge delta (deltaX og deltaY) med 0.707, altså kvadratroden af 0.5
 // lav check om midlertidig position er lovlig
 let playerDirection = { x: 0, y: 0 };
 function movePlayer(deltaTime) {
-  if (hitAnimationActive) return; 
-  
+  if (hitAnimationActive) return;
+
   // Reset player direction
   playerDirection.x = 0;
   playerDirection.y = 0;
@@ -196,7 +158,7 @@ function movePlayer(deltaTime) {
 
   const movement = {
     x: playerDirection.x * player.speed * deltaTime,
-    y: playerDirection.y * player.speed * deltaTime,
+    y: playerDirection.y * player.speed * deltaTime
   };
 
   const position = { x: player.x, y: player.y };
@@ -209,42 +171,6 @@ function movePlayer(deltaTime) {
   }
 }
 
-// function movePlayer(deltaTime) {
-//   const position = { x: player.x, y: player.y };
-//   let deltaY = 0;
-//   let deltaX = 0;
-
-//   if (controls.up) {
-//     deltaY -= player.speed * deltaTime;
-//   } else if (controls.down) {
-//     deltaY += player.speed * deltaTime;
-//   }
-//   if (controls.left) {
-//     deltaX -= player.speed * deltaTime;
-//   } else if (controls.right) {
-//     deltaX += player.speed * deltaTime;
-//   }
-
-//   if (deltaX != 0 && deltaY != 0) {
-//     // console.log("player bevæger sig diagonalt");
-
-//     const dist = Math.hypot(deltaX, deltaY);
-//     // const dist = 1.4142;
-
-//     // console.log("dist hpot: ", dist);
-
-//     deltaX = deltaX / dist;
-//     deltaY = deltaY / dist;
-//   }
-
-//   position.x += deltaX;
-//   position.y += deltaY;
-
-//   if (canMove(player, position)) {
-//     player.x = position.x;
-//     player.y = position.y;
-//   }
-// }
 
 let enemyDirection = -1; // -1 for left, 1 for right
 function moveEnemy(deltaTime) {
@@ -358,13 +284,3 @@ function displayCollisionInfo() {
     collisionInfo.classList.remove("collision");
   }
 }
-// function displayCollisionInfo() {
-//   const collisionInfo = document.querySelector("#collision-status");
-//   if (player.collision) {
-//     collisionInfo.textContent = "You're HIT!!";
-//     collisionInfo.classList.add("collision");
-//   } else {
-//     collisionInfo.textContent = "";
-//     collisionInfo.classList.remove("collision");
-//   }
-// }

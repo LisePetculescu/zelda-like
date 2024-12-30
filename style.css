@@ -56,7 +56,6 @@ h1 {
   animation-duration: 0.2s;
   /* animation-timing-function: steps(3); */
   animation-iteration-count: 5;
-  background-position: 0% 0%;
   animation-name: collision-animation;
 }
 

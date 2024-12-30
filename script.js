@@ -189,7 +189,7 @@ function movePlayer(deltaTime) {
 
   if (playerDirection.x == 0 && playerDirection.y == 0) return;
 
-  // calculate distance to make sure player doesn't move faster diagonally
+  // calculate distance to make sure player doesn't move faster diagonallya
   const dist = Math.hypot(playerDirection.x, playerDirection.y);
   playerDirection.x /= dist;
   playerDirection.y /= dist;

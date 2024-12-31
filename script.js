@@ -27,7 +27,7 @@ let player = {
 
 let enemy = {
   x: 185,
-  y: 180,
+  y: 180,                
   speed: 200, // px/s
   width: 30,
   height: 40,
@@ -151,7 +151,7 @@ function movePlayer(deltaTime) {
 
   if (playerDirection.x == 0 && playerDirection.y == 0) return;
 
-  // calculate distance to make sure player doesn't move faster diagonallya
+  // calculate distance to make sure player doesn't move faster diagonally
   const dist = Math.hypot(playerDirection.x, playerDirection.y);
   playerDirection.x /= dist;
   playerDirection.y /= dist;
